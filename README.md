@@ -4,7 +4,7 @@ ParticleCast is a resource with many helpful methods that utilizes Attributes an
 
 The documentation can be found here: ...
 
-### Workflow Support
+### Resource Support
 
 This resource is compatible with any framework! 
 
