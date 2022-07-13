@@ -26,7 +26,7 @@ An example of its usage is provided below:
 -- Part is referenced below. This can be a BasePart, Attachment or Model. 
 local Part = workspace.BasePart
 
--- The CastObject is returned from the .new() constructor, {} Options are passed through here. 
+-- The CastObject is returned from the .new() constructor. 
 local CastObject = ParticleCast.new(Part, {ParticleScale = 1.5})
 
 -- Emit all the ParticleEmitters from the Part.
