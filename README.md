@@ -1,6 +1,6 @@
 # ParticleCast
 
-ParticleCast is a resource with many helpful methods that utilizes Attributes and allows for easy management of a ParticleEmitter Instance. It was made with simplicty of use in mind.
+ParticleCast is a resource with many helpful methods that utilizes Attributes and allows for easy management of a ParticleEmitter Instance. It was made with simplicity of use in mind.
 
 The documentation can be found here: ...
 
