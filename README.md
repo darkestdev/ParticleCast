@@ -29,7 +29,7 @@ local Part = workspace.BasePart
 -- The CastObject is returned from the .new() constructor. 
 local CastObject = ParticleCast.new(Part, {ParticleScale = 1.5})
 
--- Emit all the ParticleEmitters from the Part.
+-- Emit all the ParticleEmitters from the CastObject.
 CastObject:Emit()
 
 -- Yield for ~2 seconds.
