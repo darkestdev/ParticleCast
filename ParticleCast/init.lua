@@ -1,23 +1,3 @@
---[[
-
-[number] EmitCount (default 1) - How many particles should this ParticleEmitter emit? (EmitCountScale affects this.) (-1 acts like "Enabled" property)
-[number] Delay (default 0) - How long should the particles delay *t* before emitting EmitCount?
-[number] Scale (default 1) - How large should the particles that come out of this ParticleEmitter be? (ParticleScale affects this.)
-
-[CastObject] ParticleCast.new([BasePart] | [Model] | [Attachment] Originator, [table] Options?)
-> - Returns a [CastObject] which is used for all the other methods.
-> - "Options" [table] is optional since there are defaults: 
-> ---- [number] ParticleScale (default 1) - Base scale of all particles. (ex. "2" - All particles are now twice as large)
-> ---- [number] EmitCountScale (default 1) - Base EmitCount scale of all particles. (ex. "2" - All particles emit twice as many particles as they normally do)
-
-[void] CastObject:Emit()
-> - Emits particles based on the attributes listed above (if the ParticleEmitter has any) as well as the "Options" table. 
-
-[void] CastObject:Cleanup()
-> - Cleans up the [CastObject], clearing the whole [CastObject] of any references, tables, etc. Every ParticleEmitter's Properties are reset back to their original state. 
-
-
-]]
 
 export type Cast = {
 	ScaleParticle: (Particle: ParticleEmitter, Scale: number) -> nil;
