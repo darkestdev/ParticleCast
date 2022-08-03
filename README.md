@@ -2,6 +2,8 @@
 
 ParticleCast is a resource with many helpful methods that utilizes Attributes and allows for easy management of a ParticleEmitter Instance. It was made with simplicity of use in mind.
 
+**API is listed below!**
+
 ### Resource Support
 
 This resource is compatible with any framework! 
