@@ -1,0 +1,8 @@
+{
+    "Lua.diagnostics.disable": [
+        "redundant-parameter"
+    ],
+    "robloxLsp.diagnostics.disable": [
+        "redundant-parameter"
+    ]
+}
