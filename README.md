@@ -69,7 +69,7 @@ ParticleCast takes advantage of [Instance Attributes](https://developer.roblox.c
 When you give it an Originator (BasePart, Model or Attachment), all the ParticleEmitter descendants inside of it can have the attributes with names listed below. 
 You can customize each ParticleEmitter very easily based on these different attributes! It's so useful for programming visual effects!
 
-**If the attribute does not exist or the ParticleEmitter does not have a value for these attributes, it uses the *Default***. 
+**If the attribute does not exist or the ParticleEmitter does not have a value for these attributes, it uses the *default***. 
 
 ### *[number]* EmitCount *[default: 0]*
 - How many particles should this ParticleEmitter emit when `:Emit()` is called? 
