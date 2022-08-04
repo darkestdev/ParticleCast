@@ -2,10 +2,11 @@ export type Cast = {
 	ScaleParticle: (Particle: ParticleEmitter, Scale: number) -> nil;
 	Emit: () -> nil;
 	Cleanup: () -> nil;
+    Destroy: () -> nil;
 	CleanParticle: (Particle: ParticleEmitter, Index: number, ParticleTable: {[string]: any}) -> nil;
 };
 
-local CastResource = {};
+local CastResource: {any} = {};
 CastResource.__index = CastResource;
 
 function CastResource.new(Originator: Model | BasePart | Attachment, Options: table): Cast
@@ -22,7 +23,7 @@ function CastResource.new(Originator: Model | BasePart | Attachment, Options: ta
 
 	self.ParticleScale = Options and Options.ParticleScale or 1; -- Scale of particles
 	self.EmitCountScale = Options and Options.EmitCountScale or 1; -- Scale of particle emission
-	self.ClearResidue = Options and Options.ClearResidue or false; -- Should particles :Clear()? 
+	self.ClearAllResidue = Options and Options.ClearAllResidue or false; -- Should particles :Clear()? 
 
 	if self.Originator then 
 		for Index, Particle in pairs(self.Originator:GetDescendants()) do
@@ -71,16 +72,30 @@ function CastResource:Emit(): Cast
 
 	for Index, ParticleTable in pairs(self.Particles) do 
 		local Particle: ParticleEmitter = ParticleTable.Object;
-		local EmitCount: number | nil = Particle:GetAttribute("EmitCount");
+		local EmitCount: number | nil = Particle:GetAttribute("EmitCount") or 1;
 		local EmitDelay: number | nil = Particle:GetAttribute("Delay");
-		local CleanupDelay: number | nil = Particle:GetAttribute("CleanupDelay");
+        local CleanupDelay: number | nil = Particle:GetAttribute("CleanupDelay");
+
+        ParticleTable.Cleaned = false;
 		
 		if EmitCount then 
 			if EmitDelay and EmitDelay > 0 then 
 				if EmitCount == -1 then 
-					task.delay(EmitDelay, function() Particle.Enabled = true; end);
+					task.delay(EmitDelay, function() 
+                        if ParticleTable.Cleaned then -- If particle is already cleaned, do not emit. 
+                            return;
+                        end; 
+                        
+                        Particle.Enabled = true; 
+                    end);
 				else 
-					task.delay(EmitDelay, function() Particle:Emit(EmitCount * EmitCountScale or 1); end);
+					task.delay(EmitDelay, function() 
+                        if ParticleTable.Cleaned then -- If particle is already cleaned, do not emit. 
+                            return;
+                        end; 
+                        
+                        Particle:Emit(EmitCount * EmitCountScale or 1); 
+                    end);
 				end
 			else 
 				if EmitCount == -1 then 
@@ -89,20 +104,16 @@ function CastResource:Emit(): Cast
 					Particle:Emit(EmitCount * EmitCountScale or 1);
 				end
 			end
-		end
 
-		if CleanupDelay and CleanupDelay > 0 then 
-			task.delay(CleanupDelay, self:CleanParticle(Particle, Index, ParticleTable));
+            if CleanupDelay and CleanupDelay > 0 then 
+                task.delay(CleanupDelay, self:CleanParticle(Particle, Index, ParticleTable));
+            end;
 		end
 	end
 end;
 
 function CastResource:CleanParticle(Particle: ParticleEmitter, Index: number, ParticleTable: {[string]: any}): nil 
-	Particle.Size = ParticleTable.Size;
-	Particle.Speed = ParticleTable.Speed;
-	Particle.Acceleration = ParticleTable.Acceleration;
-	
-	if self.ClearResidue then 
+	if self.ClearAllResidue or Particle:GetAttribute("ClearResidue") then 
 		Particle:Clear();
 	end
 
@@ -110,15 +121,28 @@ function CastResource:CleanParticle(Particle: ParticleEmitter, Index: number, Pa
 		Particle.Enabled = false;
 	end
 
-	table.remove(ParticleTable, Index);
-end
+	ParticleTable.Cleaned = true;
+end 
 
 function CastResource:Cleanup(): Cast
 	for Index, ParticleTable in pairs(self.Particles) do 
-		local Particle: ParticleEmitter = ParticleTable.Object; 
+		local Particle: ParticleEmitter = ParticleTable.Object;
 
-		self:CleanParticle(Particle, Index, ParticleTable);
+        self:CleanParticle(Particle, Index, ParticleTable);
 	end
+end;
+
+function CastResource:Destroy(): Cast
+    for Index, ParticleTable in pairs(self.Particles) do 
+		local Particle: ParticleEmitter = ParticleTable.Object;
+
+        Particle.Size = ParticleTable.Size;
+        Particle.Speed = ParticleTable.Speed;
+        Particle.Acceleration = ParticleTable.Acceleration;
+        
+        table.remove(self.Particles, Index);
+    end;
+	
 
 	table.clear(self);
 	setmetatable(self, nil);
