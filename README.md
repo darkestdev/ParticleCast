@@ -80,7 +80,7 @@ You can customize each ParticleEmitter very easily based on these different attr
 - How long should this ParticleEmitter delay before it emits its particles? 
   - *Setting this attribute to '0' causes it to have no delay once `:Emit()` is called.* 
 
-### *[number]* Scale *[default: 0]*
+### *[number]* Scale *[default: 1]*
 - How large should the particles that come out of this ParticleEmitter be? 
   - ***ParticleScale** affects this attribute.*
 
